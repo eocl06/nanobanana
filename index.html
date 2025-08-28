@@ -33,13 +33,7 @@
         .highlighted-text { background-color: var(--gemini-light-bg); color: var(--gemini-blue); padding: 3px 6px; border-radius: 4px; font-weight: 600; }
         
         /* Carousel için temel stiller */
-        .carousel-container {
-            position: relative;
-            max-width: 100%;
-            /* DÜZELTME: Alt boşluk azaltıldı */
-            margin: 40px auto 20px;
-            overflow: hidden;
-        }
+        .carousel-container { position: relative; max-width: 100%; margin: 40px auto 20px; overflow: hidden; }
         .carousel-inner { display: flex; transition: transform 0.5s ease-in-out; align-items: flex-start; }
         .carousel-item { min-width: 100%; box-sizing: border-box; text-align: center; padding: 0 10px; }
         .carousel-item .prompt-text { font-family: 'Inter', sans-serif; font-size: 0.9rem; color: var(--muted); line-height: 1.5; padding: 8px 10px; margin-bottom: 0; }
@@ -57,15 +51,9 @@
         .image-comparison-slider .slider-handle { position: absolute; top: 0; left: 50%; width: 4px; height: 100%; background-color: rgba(255, 255, 255, 0.8); transform: translateX(-50%); z-index: 10; pointer-events: none; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
         .image-comparison-slider .slider-handle::after { content: '↔'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(255, 255, 255, 0.8); color: #333; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: bold; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
 
-        .cta-section {
-            text-align: center;
-            /* DÜZELTME: Üst boşluk azaltıldı */
-            margin: 25px auto 30px;
-            padding: 30px 0;
-            border-top: 1px dashed #eee;
-        }
+        .cta-section { text-align: center; margin: 25px auto 30px; padding: 30px 0; border-top: 1px dashed #eee; }
         .cta-section .cta-text { font-family: 'Inter', sans-serif; font-size: 1.2rem; line-height: 1.8; color: var(--text); margin-bottom: 30px; max-width: 650px; margin-left: auto; margin-right: auto; }
-        .cta-section .cta-text strong { color: var(--gemini-red); font-weight: 600; }
+        .cta-section .cta-text strong { font-weight: 600; }
         .button { background: linear-gradient(90deg, var(--gemini-blue) 0%, var(--gemini-green) 100%); color: white; padding: 14px 36px; border-radius: 10px; font-size: 1.05rem; font-weight: 500; text-decoration: none; box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3); transition: all 0.3s ease; display: inline-block; border: none; cursor: pointer; }
         .button:hover { background: linear-gradient(90deg, var(--gemini-green) 0%, var(--gemini-yellow) 100%); box-shadow: 0 6px 16px rgba(52, 168, 83, 0.4); transform: translateY(-2px); }
 
@@ -80,20 +68,10 @@
     <div class="container">
         <h1>30 Ağustos Zaferi’nin Renkleri</h1>
 
-        <p style="font-size: 1.1rem; color: var(--text); font-weight: 400; margin-top: 15px; margin-bottom: 25px;">
-            30 Ağustos, yalnızca bir tarih değil; ortak hafızamızda yankılanan o büyük gururun ve sarsılmaz inancın adı. O duygunun en berrak hâlini, o günlere tanıklık eden fotoğraflarda buluyoruz: tozlu yollarda yürüyen bir ordu, omuz omuza verilen mücadele, kaderimizi değiştiren kararlı bakışlar… ve çoğu siyah-beyaz.
-        </p>
-        <p>
-            Bugün o karelere bir adım daha yaklaştık. Son günlerde dijital dünyada yeni bir heyecan var: Google’ın “<strong class="highlighted-text">Nano Banana</strong>” trendi. (Kısaca: Nano Banana, Google Gemini içinde kısa komutlarla fotoğraflara yapay zekâ destekli renklendirme ve yaratıcı dokunuşlar yapmayı sağlayan bir araçtır.) Bundle editörleri olarak bu özel günde bu heyecanı anlamlı bir yerden değerlendirdik; <strong class="highlighted-text">Atatürk ve Kurtuluş Savaşı’ndan hepimizin bildiği fotoğrafları biz seçtik, renklendirmeyi ise Nano Banana yaptı.</strong> Amacımız tarihi “yeniden yazmak” değil; o anların içindeki canlılığı, kararlılığı ve umudu bugünün gözleriyle yeniden hissettirmek.
-        </p>
-        <p>
-            Mustafa Kemal Atatürk’ün gözlerindeki çelik gibi irade, askerlerimizin yüzlerindeki yorgun ama onurlu ifade—renkle birlikte bazı ayrıntılar daha da yakına geliyor. Her kareye saygıyla yaklaştık; orijinaller korunuyor, renkler ise tarihsel bir yorum olarak ekleniyor.
-        </p>
-        <p>
-            Aşağıda Carousel alanında çalışmaları görebilir, her fotoğrafın altında kullandığımız promptu inceleyebilirsiniz. Aynı adımlarla siz de kendi arşivinizdeki kareleri deneyebilirsiniz.
-        </p>
-
-        <h2>Geçmişten Renkli Esintiler: Google Gemini ile Yeniden Canlanan Anlar</h2>
+        <p>30 Ağustos, yalnızca bir tarih değil; ortak hafızamızda yankılanan <strong>o büyük gururun ve sarsılmaz inancın adı</strong>. O duygunun en berrak hâlini, o günlere tanıklık eden fotoğraflarda buluyoruz: tozlu yollarda yürüyen bir ordu, omuz omuza verilen mücadele, kaderimizi değiştiren kararlı bakışlar… ve çoğu siyah-beyaz.</p>
+        <p>Bildiğiniz üzere son günlerde dijital dünyada yeni bir heyecan var: <strong>Google’ın “Nano Banana” trendi</strong>. (Kısaca: Nano Banana, Google Gemini içinde kısa komutlarla fotoğraflara yapay zekâ destekli yaratıcı dokunuşlar yapmayı sağlayan bir araç.)</p>
+        <p>Bundle editörleri olarak bu özel günde bu heyecanı anlamlı bir yerden değerlendirdik; Atatürk ve Kurtuluş Savaşı’ndan hepimizin bildiği fotoğrafları biz seçtik, renklendirmeyi ise Nano Banana yaptı. Amacımız tarihi “yeniden yazmak” değil; <strong>o anların içindeki canlılığı, kararlılığı ve umudu bugünün gözleriyle yeniden hissettirmekti.</strong></p>
+        <p>Aşağıdaki carousel alanında çalışmaları görebilir, her fotoğrafın altında kullandığımız istemi inceleyebilirsiniz.</p>
 
         <div class="carousel-container">
             <div class="carousel-inner" id="carouselInner">
@@ -110,7 +88,7 @@
                 <div class="carousel-item">
                      <div class="image-comparison-slider">
                         <img class="bw-image" src="https://i.ibb.co/chrXppd0/image.png" alt="Kurtuluş Savaşı cephesi Siyah Beyaz">
-                        <img class="color-image" src="https://i.ibb.co/kgbcTxcL/Gemini-Generated-Image-w0edo2w0edo2w0ed.png" alt="Kurtuluş Savaşı cephesi Renkli">
+                        <img class="color-image" src="https://i.ibb.co/kgbcTL/Gemini-Generated-Image-w0edo2w0edo2w0ed.png" alt="Kurtuluş Savaşı cephesi Renkli">
                         <div class="slider-handle"></div>
                     </div>
                     <p class="prompt-text"><strong>Kullanılan istem:</strong> "A black and white photo from the Turkish War of Independence front, colorized with realistic and dramatic tones."</p>
@@ -124,8 +102,8 @@
         </div>
         <div class="cta-section">
             <p class="cta-text">
-                <strong style="color: var(--text);">30 Ağustos Zafer Bayramı’nı gururla kutluyoruz.</strong>
-                <br>Geçmişin siyah-beyazına bugünün renklerini katmak isterseniz: <strong class="highlighted-text">Gemini’de Nano Banana’yı kolayca deneyebilirsiniz.</strong>
+                <strong style="color: var(--gemini-blue);">30 Ağustos Zafer Bayramı’nı bugün bir kez daha gururla kutluyoruz.</strong>
+                <br>Siz de <strong>geçmişin siyah-beyazına bugünün renklerini katmak</strong> isterseniz: <strong class="highlighted-text">Gemini’de Nano Banana’yı kolayca deneyebilirsiniz.</strong>
             </p>
             <a class="button" href="https://gemini.google.com/" target="_blank">Nano Banana'yı Dene</a>
         </div>
