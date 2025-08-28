@@ -33,15 +33,16 @@
         .highlighted-text { background-color: var(--gemini-light-bg); color: var(--gemini-blue); padding: 3px 6px; border-radius: 4px; font-weight: 600; }
         
         /* Carousel için temel stiller */
-        .carousel-container { position: relative; max-width: 100%; margin: 40px auto; overflow: hidden; }
-        .carousel-inner {
-            display: flex;
-            transition: transform 0.5s ease-in-out;
-            /* DÜZELTME: Slaytların kendi yüksekliğine sahip olmasını sağlar, en uzuna göre esnemez. */
-            align-items: flex-start;
+        .carousel-container {
+            position: relative;
+            max-width: 100%;
+            /* DÜZELTME: Alt boşluk azaltıldı */
+            margin: 40px auto 20px;
+            overflow: hidden;
         }
+        .carousel-inner { display: flex; transition: transform 0.5s ease-in-out; align-items: flex-start; }
         .carousel-item { min-width: 100%; box-sizing: border-box; text-align: center; padding: 0 10px; }
-        .carousel-item .prompt-text { font-family: 'Inter', sans-serif; font-size: 0.9rem; color: var(--muted); line-height: 1.5; padding: 15px 10px 5px 10px; margin-bottom: 0; }
+        .carousel-item .prompt-text { font-family: 'Inter', sans-serif; font-size: 0.9rem; color: var(--muted); line-height: 1.5; padding: 8px 10px; margin-bottom: 0; }
         .carousel-item .prompt-text strong { color: var(--text); }
         .carousel-nav { position: absolute; top: 40%; transform: translateY(-50%); width: 100%; display: flex; justify-content: space-between; z-index: 100; pointer-events: none; }
         .carousel-nav button { background-color: rgba(0, 0, 0, 0.5); color: white; border: none; padding: 10px 15px; cursor: pointer; border-radius: 5px; font-size: 1.2rem; transition: background-color 0.3s ease; pointer-events: all; }
@@ -51,18 +52,18 @@
 
         /* Image Comparison Slider Stilleri */
         .image-comparison-slider { position: relative; width: 100%; overflow: hidden; border-radius: var(--carousel-radius); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); cursor: ew-resize; -webkit-user-select: none; user-select: none; }
-        .image-comparison-slider .bw-image, .image-comparison-slider .color-image {
-            display: block;
-            width: 100%;
-            height: auto;
-            /* DÜZELTME: Görüntülerin hizasını bozabilecek 'cover' kaldırıldı. */
-            pointer-events: none;
-        }
+        .image-comparison-slider .bw-image, .image-comparison-slider .color-image { display: block; width: 100%; height: auto; pointer-events: none; }
         .image-comparison-slider .color-image { position: absolute; top: 0; left: 0; height: 100%; clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%); }
         .image-comparison-slider .slider-handle { position: absolute; top: 0; left: 50%; width: 4px; height: 100%; background-color: rgba(255, 255, 255, 0.8); transform: translateX(-50%); z-index: 10; pointer-events: none; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
         .image-comparison-slider .slider-handle::after { content: '↔'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(255, 255, 255, 0.8); color: #333; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: bold; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
 
-        .cta-section { text-align: center; margin: 50px auto 30px auto; padding: 30px 0; border-top: 1px dashed #eee; }
+        .cta-section {
+            text-align: center;
+            /* DÜZELTME: Üst boşluk azaltıldı */
+            margin: 25px auto 30px;
+            padding: 30px 0;
+            border-top: 1px dashed #eee;
+        }
         .cta-section .cta-text { font-family: 'Inter', sans-serif; font-size: 1.2rem; line-height: 1.8; color: var(--text); margin-bottom: 30px; max-width: 650px; margin-left: auto; margin-right: auto; }
         .cta-section .cta-text strong { color: var(--gemini-red); font-weight: 600; }
         .button { background: linear-gradient(90deg, var(--gemini-blue) 0%, var(--gemini-green) 100%); color: white; padding: 14px 36px; border-radius: 10px; font-size: 1.05rem; font-weight: 500; text-decoration: none; box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3); transition: all 0.3s ease; display: inline-block; border: none; cursor: pointer; }
@@ -97,33 +98,6 @@
         <div class="carousel-container">
             <div class="carousel-inner" id="carouselInner">
                 
-                <div class="carousel-item">
-                    <div class="image-comparison-slider">
-                        <img class="bw-image" src="https://i.ibb.co/k2x2x0f/ataturk-bw.jpg" alt="Atatürk Siyah Beyaz">
-                        <img class="color-image" src="https://i.ibb.co/d2xVz62/ataturk-color.jpg" alt="Atatürk Renkli">
-                        <div class="slider-handle"></div>
-                    </div>
-                    <p class="prompt-text"><strong>Kullanılan istem:</strong> "A black and white photograph of Mustafa Kemal Atatürk, colorized with vibrant historical accuracy, cinematic lighting."</p>
-                </div>
-                
-                <div class="carousel-item">
-                     <div class="image-comparison-slider">
-                        <img class="bw-image" src="https://i.ibb.co/xL1QGf4/asker-bw.jpg" alt="Türk Askerleri Siyah Beyaz">
-                        <img class="color-image" src="https://i.ibb.co/hZ27D4M/asker-color.jpg" alt="Türk Askerleri Renkli">
-                        <div class="slider-handle"></div>
-                    </div>
-                    <p class="prompt-text"><strong>Kullanılan istem:</strong> "A vintage photo of Turkish soldiers during the War of Independence, colorized to bring out the determined expressions."</p>
-                </div>
-
-                <div class="carousel-item">
-                     <div class="image-comparison-slider">
-                        <img class="bw-image" src="https://i.ibb.co/3cY2s8J/topcu-bw.jpg" alt="Topçu Birlikleri Siyah Beyaz">
-                        <img class="color-image" src="https://i.ibb.co/Wc63M29/topcu-color.jpg" alt="Topçu Birlikleri Renkli">
-                        <div class="slider-handle"></div>
-                    </div>
-                    <p class="prompt-text"><strong>Kullanılan istem:</strong> "An old photo of Turkish artillery units, colorized to show the details of the equipment and the landscape."</p>
-                </div>
-
                 <div class="carousel-item">
                      <div class="image-comparison-slider">
                         <img class="bw-image" src="https://i.ibb.co/6Jn9xxF0/image-44.png" alt="Atatürk ve İsmet İnönü Siyah Beyaz">
