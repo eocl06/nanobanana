@@ -56,7 +56,6 @@
             max-width: 100%; 
             margin: 40px auto 20px; 
             overflow: hidden; 
-            /* Yüksekliğin animasyonla değişmesi için */
             transition: height 0.35s ease-in-out; 
         }
         .carousel-inner { display: flex; transition: transform 0.5s ease-in-out; align-items: flex-start; }
@@ -179,13 +178,13 @@
                 </div>
                 
                 <div class="carousel-item">
-                    <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DQChIoojFIk/?igsh=ZHVvdmw0Z3JtZGpv" data-instgrm-version="14" style=" max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"></blockquote>
-                    <p class="prompt-text">Öğrencilerinin Atatürk'le el ele fotoğraflarını onlara hediye eden <a href="https://www.instagram.com/ebruliogretmeen/" target="_blank" class="insta-user">@ebruliogretmeen</a></p>
+                    <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DQE-0N-DJQd/?igsh=OGM5N3lncTA5MWRy" data-instgrm-version="14" style=" max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"></blockquote>
+                    <p class="prompt-text"><a href="https://www.instagram.com/ozgurogretmenn/" target="_blank" class="insta-user">@ozgurogretmenn</a> bu akım videolarının nasıl yapıldığını anlatıyor.</p>
                 </div>
 
                 <div class="carousel-item">
-                    <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DQE-0N-DJQd/?igsh=OGM5N3lncTA5MWRy" data-instgrm-version="14" style=" max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"></blockquote>
-                    <p class="prompt-text"><a href="https://www.instagram.com/ozgurogretmenn/" target="_blank" class="insta-user">@ozgurogretmenn</a> bu akım videolarının nasıl yapıldığını anlatıyor.</p>
+                    <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DQChIoojFIk/" data-instgrm-version="14" style=" max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"></blockquote>
+                    <p class="prompt-text">Öğrencilerinin Atatürk'le el ele fotoğraflarını onlara hediye eden <a href="https://www.instagram.com/ebruliogretmeen/" target="_blank" class="insta-user">@ebruliogretmeen</a></p>
                 </div>
 
             </div>
@@ -194,7 +193,6 @@
                 <button class="next" aria-label="Sonraki">&#10095;</button>
             </div>
         </div>
-
         <p>Peki, neden böylesine basit bir fikir hepimizin bu kadar hoşuna gitti?</p>
         <p>Çünkü Cumhuriyet, geçmişte kalmış bir tarih değil; <strong>her kuşağın kendi diliyle</strong> yeniden anlam verdiği bir değer.</p>
         <p>Bugün ise o dil, <strong>teknolojinin dili</strong>. Öğretmenlerimizin yaptığı da tam olarak bu.</p>
@@ -218,16 +216,29 @@
     const carouselInner = document.getElementById('carouselInner');
     const prevButton = document.querySelector('.carousel-nav .prev');
     const nextButton = document.querySelector('.carousel-nav .next');
-    let carouselItems = []; // DOMContentLoaded'de doldurulacak
+    let carouselItems = []; 
     let currentIndex = 0;
     const carouselContainer = document.querySelector('.carousel-container');
+
+    // === YENİ: Tekrar kullanılabilir video sıfırlama fonksiyonu ===
+    function resetVideo(item) {
+        if (!item) return; // Güvenlik kontrolü
+        const blockquote = item.querySelector('blockquote.instagram-media');
+        // Eğer blockquote işlenmişse (içinde iframe varsa)
+        if (blockquote && blockquote.hasAttribute('data-instgrm-processed')) {
+            const newBlockquote = blockquote.cloneNode(true);
+            // 'data-instgrm-processed' attribute'unu kaldır ki tekrar işlenebilsin
+            newBlockquote.removeAttribute('data-instgrm-processed');
+            if (blockquote.parentNode) {
+                blockquote.parentNode.replaceChild(newBlockquote, blockquote);
+            }
+        }
+    }
 
     // Carousel yüksekliğini o anki aktif slayta göre ayarlar
     function adjustCarouselHeight() {
         if (carouselItems[currentIndex]) {
-            // Yüksekliği ölç
             const itemHeight = carouselItems[currentIndex].offsetHeight;
-            // Sadece 0'dan büyükse ayarla (çökmeyi engelle)
             if (itemHeight > 0) {
                 carouselContainer.style.height = `${itemHeight}px`;
             }
@@ -237,21 +248,9 @@
     // Carousel'i günceller, videoları yönetir
     function updateCarousel() {
         carouselItems.forEach((item, index) => {
-            // DEĞİŞİKLİK 1: Videoları durdurmak için daha iyi bir yöntem
-            // Sadece aktif olmayan slaytları sıfırla
+            // Aktif olmayan slaytları sıfırla (resetVideo fonksiyonunu kullanarak)
             if (index !== currentIndex) {
-                const blockquote = item.querySelector('blockquote.instagram-media');
-                // Eğer blockquote işlenmişse (içinde iframe varsa)
-                if (blockquote && blockquote.hasAttribute('data-instgrm-processed')) {
-                    // Onu orijinal, işlenmemiş haliyle değiştir
-                    const newBlockquote = blockquote.cloneNode(true);
-                    // 'data-instgrm-processed' attribute'unu kaldır ki tekrar işlenebilsin
-                    newBlockquote.removeAttribute('data-instgrm-processed');
-                    // DOM'daki eskiyi yeniyle değiştir
-                    if (blockquote.parentNode) {
-                        blockquote.parentNode.replaceChild(newBlockquote, blockquote);
-                    }
-                }
+                resetVideo(item);
             }
         });
 
@@ -260,15 +259,12 @@
            carouselInner.style.transform = `translateX(${-currentIndex * 100}%)`;
         }
         
-        // Instagram script'ini çağır (sadece yeni, işlenmemiş blockquote'ları işleyecek)
+        // Instagram script'ini çağır
         if (window.instgrm) {
             setTimeout(() => {
                 window.instgrm.Embeds.process();
-            }, 50); // Hafif bir gecikme, DOM'un güncellenmesi için
+            }, 50); 
         }
-        
-        // DEĞİŞİKLİK 2: Hatalı setTimeout kaldırıldı.
-        // Yükseklik ayarı artık 'instgrm:media:rendered' olayıyla tetiklenecek.
     }
 
     // Buton eventleri
@@ -292,21 +288,46 @@
         carouselInner.addEventListener('touchend', handleTouchEnd, false);
 
         // Yükseklik ayarı için event listener'lar
-        // DEĞİŞİKLİK 3: Sadece bu iki listener'a güveniyoruz
         window.addEventListener('instgrm:media:rendered', adjustCarouselHeight);
         window.addEventListener('resize', adjustCarouselHeight);
+
+        // === YENİ: VİDEOYU SCROLL'DA DURDURMAK İÇİN ===
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.1 // %10 görünürlük eşiği
+        };
+
+        const observerCallback = (entries) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    // Viewport'tan ÇIKTI: Aktif videoyu durdur
+                    resetVideo(carouselItems[currentIndex]);
+                } else {
+                    // Viewport'a GİRDİ: Aktif videoyu yeniden yükle (tıklanabilir hale getir)
+                    if (window.instgrm) {
+                        window.instgrm.Embeds.process();
+                    }
+                    // Yüksekliği de ayarla (çökme olmasın diye)
+                    adjustCarouselHeight();
+                }
+            });
+        };
+
+        const intersectionObserver = new IntersectionObserver(observerCallback, observerOptions);
+        // Carousel'i izle
+        intersectionObserver.observe(carouselContainer);
+        // =============================================
 
         // İlk Instagram embed'ini yükle
         if (window.instgrm) {
             window.instgrm.Embeds.process();
         } else {
-            // Instagram script'i henüz yüklenmediyse, ilk yükleme için bir gecikme
-            // (Bu genelde <script async> bloğundan önce çalışırsa olur)
             setTimeout(adjustCarouselHeight, 1500); // Fallback
         }
     });
 
-    // --- SWIPE FONKSİYONLARI (Değişiklik yok) ---
+    // --- SWIPE FONKSİYONLARI ---
     let touchStartX = 0;
     let touchEndX = 0;
     let isSwiping = false;
