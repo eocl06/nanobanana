@@ -193,11 +193,13 @@
                 <button class="next" aria-label="Sonraki">&#10095;</button>
             </div>
         </div>
+
         <p>Peki, neden böylesine basit bir fikir hepimizin bu kadar hoşuna gitti?</p>
         <p>Çünkü Cumhuriyet, geçmişte kalmış bir tarih değil; <strong>her kuşağın kendi diliyle</strong> yeniden anlam verdiği bir değer.</p>
         <p>Bugün ise o dil, <strong>teknolojinin dili</strong>. Öğretmenlerimizin yaptığı da tam olarak bu.</p>
         <p>Atatürk'le aynı karede olmanın mutluluğunu yaşayan her çocuk, Cumhuriyet'in bunca yıldan sonra bile ne kadar canlı, ne kadar “bugüne ait” bir fikir olduğunun en güzel kanıtı. <strong>Geçmişe değil, tam da bugüne bakan muazzam bir hediye.</strong></p>
-        <p>Cumhuriyetimizin 102. kuruluş yıldönümüne yaklaşırken, öğrencilerin ışıldayan gözlerinde bu eşsiz armağanın hiç eskimediğini bir kez daha görüyoruz. Bu duyguyu bize yeniden hatırlatan tüm öğretmenlerimize, kalpten bir teşekkür borçluyuz.</p>
+        <p>Cumhuriyetimizin 102. kuruluş yıldönümüne yaklaşırken, öğrencilerin ışıldayan gözlerinde bu eşsiz armağanın hiç eskimediğini bir kez daha görüyoruz. Bu duyguyu bize yeniden hatırlatan tüm öğretmenlerimize, 
+            <strong>kalpten bir teşekkür borçluyuz</strong>.</p>
         <p><strong>Tüm öğretmen ve öğrencilerimizin yaklaşan Cumhuriyet Bayramı kutlu olsun!</strong></p>
 
     </div>
@@ -212,7 +214,7 @@
         progressBar.style.width = `${scrollPercent}%`;
     });
 
-    // === GÜNCELLENMİŞ CAROUSEL SCRIPT ===
+    // === GÜNCELLENMİŞ VE STABİL CAROUSEL SCRIPT ===
     const carouselInner = document.getElementById('carouselInner');
     const prevButton = document.querySelector('.carousel-nav .prev');
     const nextButton = document.querySelector('.carousel-nav .next');
@@ -220,20 +222,25 @@
     let currentIndex = 0;
     const carouselContainer = document.querySelector('.carousel-container');
 
-    // === YENİ: Tekrar kullanılabilir video sıfırlama fonksiyonu ===
+    // === DEĞİŞİKLİK: Videoyu durdurmak için IFRAME'i silen sağlam fonksiyon ===
     function resetVideo(item) {
-        if (!item) return; // Güvenlik kontrolü
-        const blockquote = item.querySelector('blockquote.instagram-media');
-        // Eğer blockquote işlenmişse (içinde iframe varsa)
-        if (blockquote && blockquote.hasAttribute('data-instgrm-processed')) {
-            const newBlockquote = blockquote.cloneNode(true);
-            // 'data-instgrm-processed' attribute'unu kaldır ki tekrar işlenebilsin
-            newBlockquote.removeAttribute('data-instgrm-processed');
-            if (blockquote.parentNode) {
-                blockquote.parentNode.replaceChild(newBlockquote, blockquote);
+        if (!item) return; 
+        
+        // iframe'i bul (video ve sesin kaynağı)
+        const iframe = item.querySelector('iframe.instagram-media-rendered');
+        if (iframe) {
+            // iframe'i DOM'dan tamamen kaldır
+            iframe.parentNode.removeChild(iframe);
+            
+            // Şimdi, blockquote'un tekrar işlenebilir olduğundan emin olmalıyız.
+            const blockquote = item.querySelector('blockquote.instagram-media');
+            if (blockquote && blockquote.hasAttribute('data-instgrm-processed')) {
+                // Instagram'ın eklediği "işlendi" etiketini kaldır
+                blockquote.removeAttribute('data-instgrm-processed');
             }
         }
     }
+    // =======================================================================
 
     // Carousel yüksekliğini o anki aktif slayta göre ayarlar
     function adjustCarouselHeight() {
@@ -248,7 +255,7 @@
     // Carousel'i günceller, videoları yönetir
     function updateCarousel() {
         carouselItems.forEach((item, index) => {
-            // Aktif olmayan slaytları sıfırla (resetVideo fonksiyonunu kullanarak)
+            // Aktif olmayan slaytları sıfırla (yeni resetVideo fonksiyonuyla)
             if (index !== currentIndex) {
                 resetVideo(item);
             }
@@ -259,7 +266,7 @@
            carouselInner.style.transform = `translateX(${-currentIndex * 100}%)`;
         }
         
-        // Instagram script'ini çağır
+        // Instagram script'ini çağır (sadece aktif ve sıfırlanmış olanlar işlenecek)
         if (window.instgrm) {
             setTimeout(() => {
                 window.instgrm.Embeds.process();
@@ -291,33 +298,8 @@
         window.addEventListener('instgrm:media:rendered', adjustCarouselHeight);
         window.addEventListener('resize', adjustCarouselHeight);
 
-        // === YENİ: VİDEOYU SCROLL'DA DURDURMAK İÇİN ===
-        const observerOptions = {
-            root: null, // viewport
-            rootMargin: '0px',
-            threshold: 0.1 // %10 görünürlük eşiği
-        };
-
-        const observerCallback = (entries) => {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting) {
-                    // Viewport'tan ÇIKTI: Aktif videoyu durdur
-                    resetVideo(carouselItems[currentIndex]);
-                } else {
-                    // Viewport'a GİRDİ: Aktif videoyu yeniden yükle (tıklanabilir hale getir)
-                    if (window.instgrm) {
-                        window.instgrm.Embeds.process();
-                    }
-                    // Yüksekliği de ayarla (çökme olmasın diye)
-                    adjustCarouselHeight();
-                }
-            });
-        };
-
-        const intersectionObserver = new IntersectionObserver(observerCallback, observerOptions);
-        // Carousel'i izle
-        intersectionObserver.observe(carouselContainer);
-        // =============================================
+        // "Aşağı kayınca durdur" özelliği (IntersectionObserver) kaldırıldı,
+        // çünkü carousel'in çökmesine neden oluyordu.
 
         // İlk Instagram embed'ini yükle
         if (window.instgrm) {
@@ -344,7 +326,7 @@
     }
 
     function handleTouchMove(e) {
-        if (!isSwiping) return;
+        if (!isSwipingu) return;
         touchEndX = e.touches[0].clientX;
 
         const diff = touchStartX - touchEndX;
