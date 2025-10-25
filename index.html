@@ -17,7 +17,18 @@
             --carousel-radius: 12px;
         }
         * { box-sizing: border-box; }
-        body { margin: 0; padding: 0; font-family: 'Roboto', sans-serif; background: var(--bg); color: var(--text); font-size: 1.05rem; line-height: 1.75; }
+        
+        /* DEĞİŞİKLİK 1: Yatay scroll bar'ı engellemek için eklendi */
+        body { 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Roboto', sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            font-size: 1.05rem; 
+            line-height: 1.75; 
+            overflow-x: hidden; /* Yatay kaydırmayı engelle */
+        }
         
         /* Değişiklik burada: Progress Bar'a gradyan eklendi */
         .progress-bar { 
@@ -93,12 +104,17 @@
 
         @media (max-width: 768px) {
             h1 { font-size: 2rem; } h2 { font-size: 1.4rem; } .container { padding: 20px 16px 24px; }
+            
+            /* DEĞİŞİKLİK 2: 'top' kuralı butonlardan alınıp nav container'a taşındı */
+            .carousel-nav {
+                top: 35%; /* Mobil için yukarı kaydır */
+            }
             .carousel-nav button { 
                 padding: 8px 12px; 
                 font-size: 1.5rem; /* Mobil için okları küçült */
                 width: 40px; 
                 height: 40px; 
-                top: 35%; /* Mobil için yukarı kaydır */
+                /* 'top: 35%' kuralı buradan kaldırıldı */
             } 
             .carousel-nav .prev { margin-left: -10px; }
             .carousel-nav .next { margin-right: -10px; }
@@ -155,7 +171,7 @@
         <p>Bugün ise o dil, <strong>teknolojinin dili</strong>. Öğretmenlerimizin yaptığı da tam olarak bu.</p>
         <p>O fotoğraflarda Atatürk'ün yanında gülümseyen her çocuk, Cumhuriyet'in bunca yıldan sonra bile ne kadar <strong>canlı, ne kadar "bugüne ait" bir fikir</strong> olduğunun en güzel kanıtı. <strong>Geçmişe değil, tam da bugüne bakan</strong> muazzam bir hediye.</p>
         <p>Cumhuriyetimizin 102. kuruluş yıldönümüne yaklaşırken, <strong>öğrencilerin ışıldayan gözlerinde</strong> bu eşsiz armağanın hiç eskimediğini bir kez daha görüyoruz. Bu duyguyu bize yeniden hatırlatan tüm öğretmenlerimize, <strong>kalpten bir teşekkür borçluyuz</strong>.</p>
-        <p>Tüm öğretmen ve öğrencilerimizin <strong>yaklaşan Cumhuriyet Bayramı kutlu olsun!</strong></p>
+        <p>Tüm öğretmen ve öğrencilerimizin <strong>yaklaşan Cumhuriyet Bayramı kutlu olsun! </strong></p>
 
     </div>
 
@@ -204,7 +220,65 @@
     // Sayfa yüklendiğinde carousel'i ayarla
     document.addEventListener('DOMContentLoaded', () => {
         updateCarousel();
+        
+        // DEĞİŞİKLİK 3: Mobil swipe (kaydırma) özelliği eklendi
+        carouselInner.addEventListener('touchstart', handleTouchStart, false);
+        carouselInner.addEventListener('touchmove', handleTouchMove, false);
+        carouselInner.addEventListener('touchend', handleTouchEnd, false);
     });
+
+    // --- YENİ EKLENEN SWIPE FONKSİYONLARI ---
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let isSwiping = false;
+    const swipeThreshold = 50; // Kaydırma olarak algılanacak min. piksel
+
+    function handleTouchStart(e) {
+        touchStartX = e.touches[0].clientX;
+        isSwiping = true;
+
+        // Instagram iframe'lerinin dokunma olaylarını çalmasını engelle
+        const iframes = carouselInner.querySelectorAll('iframe.instagram-media-rendered');
+        iframes.forEach(iframe => {
+            iframe.style.pointerEvents = 'none';
+        });
+    }
+
+    function handleTouchMove(e) {
+        if (!isSwiping) return;
+        touchEndX = e.touches[0].clientX;
+
+        // Yatay kaydırma yaparken dikey sayfa scroll'unu engelle
+        const diff = touchStartX - touchEndX;
+        if (Math.abs(diff) > 10) { 
+            e.preventDefault();
+        }
+    }
+
+    function handleTouchEnd() {
+        if (!isSwiping) return;
+        isSwiping = false;
+
+        const diff = touchStartX - touchEndX;
+
+        if (Math.abs(diff) > swipeThreshold) {
+            // Swipe algılandı
+            if (diff > 0) {
+                // Sola kaydırma (İleri)
+                nextButton.click(); // Mevcut butonu tetikle
+            } else {
+                // Sağa kaydırma (Geri)
+                prevButton.click(); // Mevcut butonu tetikle
+            }
+        }
+
+        // Instagram iframe'lerini tekrar tıklanabilir yap
+        const iframes = carouselInner.querySelectorAll('iframe.instagram-media-rendered');
+        iframes.forEach(iframe => {
+            iframe.style.pointerEvents = 'auto';
+        });
+    }
 
 </script>
 <script async src="//www.instagram.com/embed.js"></script>
