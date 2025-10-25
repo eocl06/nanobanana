@@ -80,10 +80,25 @@
             text-decoration: underline; 
         }
 
+        /* === GÜNCELLENMİŞ LİNK STİLİ (3. VERSİYON) === */
+        p .text-link {
+            color: inherit; /* Rengi ebeveynden (strong) al (yani #333) */
+            font-weight: inherit; /* Kalınlığı ebeveynden (strong) al */
+            text-decoration: underline; /* Altını varsayılan olarak çiz */
+            text-decoration-color: var(--muted); /* Alt çizgi rengini hafif soluk yap */
+            text-decoration-thickness: 1px; /* Alt çizgi kalınlığı */
+            transition: color 0.2s ease, text-decoration-color 0.2s ease;
+        }
+        p .text-link:hover {
+            color: var(--brand-red); /* Hover'da metin kırmızı olsun */
+            text-decoration-color: var(--brand-red); /* Alt çizgi de kırmızı olsun */
+        }
+        /* ============================================= */
+
         /* Düzeltilmiş Buton Stilleri */
         .carousel-nav { 
             position: absolute; 
-            top: 40%; /* Dikey hizalama (videoya ortalamak için) */
+            top: 40%; 
             transform: translateY(-50%); 
             width: 100%; 
             display: flex; 
@@ -110,7 +125,7 @@
             justify-content: center;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); 
             opacity: 1; 
-            line-height: 1; /* Okun tam ortalanması için */
+            line-height: 1; 
         }
         .carousel-nav button:hover { 
             background-color: #fff; 
@@ -124,7 +139,7 @@
             h1 { font-size: 2rem; } h2 { font-size: 1.4rem; } .container { padding: 20px 16px 24px; }
             
             .carousel-nav {
-                top: 35%; /* Mobilde dikey hizalama */
+                top: 35%; 
                 padding: 0 5px; 
             }
             .carousel-nav button { 
@@ -144,9 +159,11 @@
     <div class="container">
         <h1>Öğretmenlerden öğrencilerine "Atatürk'le fotoğraf" sürprizi</h1>
 
-        <p>Sosyal medyada, özellikle <strong>Cumhuriyetimizin 102. kuruluş yıldönümüne</strong> yaklaştığımız şu günlerde, içinizi ısıtacak yeni bir akımla karşılaşmış olabilirsiniz. Başrolde, ülkemizin dört bir yanından <strong>yaratıcı öğretmenlerimiz</strong> ve son günlerin trendi Google'ın yapay zekâsı <strong>Gemini ile fotoğraf oluşturma akımı</strong> var.</p>
+        <p>Sosyal medyada, özellikle <strong>Cumhuriyetimizin 102. kuruluş yıldönümüne</strong> yaklaştığımız şu günlerde, içinizi ısıtacak yeni bir akımla karşılaşmış olabilirsiniz. Başrolde, ülkemizin dört bir yanından <strong>yaratıcı öğretmenlerimiz</strong> ve son günlerin trendi Google'ın yapay zekâsı <strong><a href="https://gemini.google.com/" target="_blank" class="text-link">Gemini</a> ile fotoğraf oluşturma akımı</strong> var.</p>
+        
         <p>Kısa sürede sosyal medyada yayılarak tatlı bir akıma dönüşen videolarda, yapay zekânın gücünden yararlanan öğretmenler öğrencilerinin fotoğraflarını <strong>Mustafa Kemal Atatürk ile aynı karede</strong> birleştiriyor. Bu sürprizi gören çocukların yüzlerine yansıyan şaşkınlık ve sevinç ise <strong>her görenin içini ısıtıyor</strong> elbette.</p>
         <p>Çocukların kurucularıyla aynı fotoğrafta bir “anı”ya sahip olması fikri doğal olarak büyük beğeni topladı. Paylaşılan işler oldukça güzel yorumlar aldı ve hepimizde şaşkınlıkla karışık bir sevinç, içten bir özlem ve derin bir gurur uyandırdı.</p>
+
         <div class="carousel-container">
             <div class="carousel-inner" id="carouselInner">
                 
@@ -178,7 +195,8 @@
         <p>Atatürk'le aynı karede olmanın mutluluğunu yaşayan her çocuk, Cumhuriyet'in bunca yıldan sonra bile ne kadar canlı, ne kadar “bugüne ait” bir fikir olduğunun en güzel kanıtı. <strong>Geçmişe değil, tam da bugüne bakan muazzam bir hediye.</strong></p>
         <p>Cumhuriyetimizin 102. kuruluş yıldönümüne yaklaşırken, öğrencilerin ışıldayan gözlerinde bu eşsiz armağanın hiç eskimediğini bir kez daha görüyoruz. Bu duyguyu bize yeniden hatırlatan tüm öğretmenlerimize, kalpten bir teşekkür borçluyuz.</p>
         <p><strong>Tüm öğretmen ve öğrencilerimizin yaklaşan Cumhuriyet Bayramı kutlu olsun!</strong></p>
-        </div>
+
+    </div>
 
 <script>
     // Progress Bar Script
