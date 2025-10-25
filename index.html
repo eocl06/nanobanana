@@ -60,31 +60,30 @@
             padding: 0 10px;
             display: flex; 
             flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
+            justify-content: center; /* İçeriği dikeyde ortala */
+            align-items: center; /* İçeriği yatayda ortala */
         }
         
         .carousel-item blockquote.instagram-media { margin: 0 auto !important; max-width: 100%; }
         .carousel-item .prompt-text { font-family: 'Inter', sans-serif; font-size: 0.9rem; color: var(--muted); line-height: 1.5; padding: 8px 10px; margin-top: 15px; }
         .carousel-item .prompt-text strong { color: var(--text); }
         
-        /* === YENİ EKLENEN STİL: Instagram kullanıcı adı linki === */
+        /* Instagram kullanıcı adı linki */
         .prompt-text .insta-user {
-            color: var(--text); /* Koyu metin rengi */
-            font-weight: 600; /* Kalın */
-            text-decoration: none; /* Alt çizgiyi kaldır */
+            color: var(--text); 
+            font-weight: 600; 
+            text-decoration: none; 
             transition: color 0.2s ease, text-decoration 0.2s ease;
         }
         .prompt-text .insta-user:hover {
-            color: var(--brand-red); /* Marka rengi */
-            text-decoration: underline; /* Üzerine gelince alt çizgi */
+            color: var(--brand-red); 
+            text-decoration: underline; 
         }
-        /* ======================================================= */
 
         /* Güncellenmiş Buton Stilleri */
         .carousel-nav { 
             position: absolute; 
-            top: 50%; 
+            top: 50%; /* Dikeyde ortalamak için (carousel-container'a göre) */
             transform: translateY(-50%); 
             width: 100%; 
             display: flex; 
@@ -107,8 +106,8 @@
             width: 55px; 
             height: 55px; 
             display: flex;
-            align-items: center;
-            justify-content: center;
+            align-items: center; /* Oku dikeyde ortala */
+            justify-content: center; /* Oku yatayda ortala */
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); 
             opacity: 1; 
         }
@@ -124,7 +123,7 @@
             h1 { font-size: 2rem; } h2 { font-size: 1.4rem; } .container { padding: 20px 16px 24px; }
             
             .carousel-nav {
-                top: 45%; 
+                top: 45%; /* Mobilde dikey konum biraz ayarlandı */
                 padding: 0 5px; 
             }
             .carousel-nav button { 
@@ -199,7 +198,7 @@
     let currentIndex = 0;
 
     function updateCarousel() {
-        carouselItems = document.querySelectorAll('.carousel-item'); // Listeyi yenile
+        carouselItems = document.querySelectorAll('.carousel-item'); 
         if (carouselItems.length > 0) {
            carouselInner.style.transform = `translateX(${-currentIndex * 100}%)`;
         }
@@ -211,13 +210,11 @@
     }
 
     prevButton.addEventListener('click', () => {
-        // DİKKAT: carouselItems.length artık 3 olarak güncellenecek
         currentIndex = (currentIndex > 0) ? currentIndex - 1 : carouselItems.length - 1;
         updateCarousel();
     });
 
     nextButton.addEventListener('click', () => {
-        // DİKKAT: carouselItems.length artık 3 olarak güncellenecek
         currentIndex = (currentIndex < carouselItems.length - 1) ? currentIndex + 1 : 0;
         updateCarousel();
     });
