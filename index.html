@@ -218,26 +218,23 @@
     const carouselInner = document.getElementById('carouselInner');
     const prevButton = document.querySelector('.carousel-nav .prev');
     const nextButton = document.querySelector('.carousel-nav .next');
-    let carouselItems = []; 
+    let carouselItems = [];
     let currentIndex = 0;
     const carouselContainer = document.querySelector('.carousel-container');
 
-    // === DEĞİŞİKLİK: Videoyu durdurmak için IFRAME'i silen sağlam fonksiyon ===
-    function resetVideo(item) {
-        if (!item) return; 
-        
-        // iframe'i bul (video ve sesin kaynağı)
+    // === DEĞİŞİKLİK: Videoyu DOM'dan silmek yerine durduran fonksiyon ===
+    function pauseSlide(index) {
+        if (!carouselItems[index]) return; // Slayt yoksa çık
+
+        const item = carouselItems[index];
+        // iframe'i bul
         const iframe = item.querySelector('iframe.instagram-media-rendered');
-        if (iframe) {
-            // iframe'i DOM'dan tamamen kaldır
-            iframe.parentNode.removeChild(iframe);
-            
-            // Şimdi, blockquote'un tekrar işlenebilir olduğundan emin olmalıyız.
-            const blockquote = item.querySelector('blockquote.instagram-media');
-            if (blockquote && blockquote.hasAttribute('data-instgrm-processed')) {
-                // Instagram'ın eklediği "işlendi" etiketini kaldır
-                blockquote.removeAttribute('data-instgrm-processed');
-            }
+        
+        if (iframe && iframe.src) {
+            // iframe'i DOM'dan silmeden, sadece kaynağını yeniden yükleyerek
+            // videoyu/sesi durdurmanın en güvenli yolu budur.
+            // Bu, Instagram'ın embed script'i ile çakışmayı önler.
+            iframe.src = iframe.src;
         }
     }
     // =======================================================================
@@ -253,36 +250,38 @@
     }
 
     // Carousel'i günceller, videoları yönetir
-    function updateCarousel() {
-        carouselItems.forEach((item, index) => {
-            // Aktif olmayan slaytları sıfırla (yeni resetVideo fonksiyonuyla)
-            if (index !== currentIndex) {
-                resetVideo(item);
-            }
-        });
+    function updateCarousel(previousIndex) {
+        // 1. Önceki slaytı durdur (eğer varsa ve mevcut slayttan farklıysa)
+        if (previousIndex !== undefined && previousIndex !== currentIndex) {
+            pauseSlide(previousIndex);
+        }
 
-        // Slaytı kaydır
+        // 2. Slaytı kaydır
         if (carouselItems.length > 0) {
-           carouselInner.style.transform = `translateX(${-currentIndex * 100}%)`;
+            carouselInner.style.transform = `translateX(${-currentIndex * 100}%)`;
         }
         
-        // Instagram script'ini çağır (sadece aktif ve sıfırlanmış olanlar işlenecek)
+        // 3. Instagram script'ini çağır
+        // Bu, *yeni* aktif olan slaytın (eğer yüklenmediyse) yüklenmesini tetikler.
+        // Zaten yüklenmiş olanlara dokunmaz.
         if (window.instgrm) {
             setTimeout(() => {
                 window.instgrm.Embeds.process();
-            }, 50); 
+            }, 50); // Render için küçük bir gecikme
         }
     }
 
-    // Buton eventleri
+    // Buton eventleri (DEĞİŞTİ)
     prevButton.addEventListener('click', () => {
+        const prevIndex = currentIndex; // Mevcut indeksi "önceki" olarak kaydet
         currentIndex = (currentIndex > 0) ? currentIndex - 1 : carouselItems.length - 1;
-        updateCarousel();
+        updateCarousel(prevIndex); // "Önceki" indeksi fonksiyona yolla
     });
 
     nextButton.addEventListener('click', () => {
+        const prevIndex = currentIndex; // Mevcut indeksi "önceki" olarak kaydet
         currentIndex = (currentIndex < carouselItems.length - 1) ? currentIndex + 1 : 0;
-        updateCarousel();
+        updateCarousel(prevIndex); // "Önceki" indeksi fonksiyona yolla
     });
     
     // Sayfa yüklendiğinde
@@ -294,18 +293,16 @@
         carouselInner.addEventListener('touchmove', handleTouchMove, false);
         carouselInner.addEventListener('touchend', handleTouchEnd, false);
 
-        // Yükseklik ayarı için event listener'lar
-        window.addEventListener('instgrm:media:rendered', adjustCarouselHeight);
+        // Yükselik ayarı için event listener'lar
+        window.addEventListener('instgm:media:rendered', adjustCarouselHeight);
         window.addEventListener('resize', adjustCarouselHeight);
-
-        // "Aşağı kayınca durdur" özelliği (IntersectionObserver) kaldırıldı,
-        // çünkü carousel'in çökmesine neden oluyordu.
 
         // İlk Instagram embed'ini yükle
         if (window.instgrm) {
             window.instgrm.Embeds.process();
         } else {
-            setTimeout(adjustCarouselHeight, 1500); // Fallback
+            // Script yüklenmezse diye bir yedek gecikme
+            setTimeout(adjustCarouselHeight, 1500);
         }
     });
 
@@ -319,6 +316,7 @@
         touchStartX = e.touches[0].clientX;
         isSwiping = true;
 
+        // Kaydırma sırasında videonun içine tıklamayı engelle
         const iframes = carouselInner.querySelectorAll('iframe.instagram-media-rendered');
         iframes.forEach(iframe => {
             iframe.style.pointerEvents = 'none';
@@ -326,12 +324,13 @@
     }
 
     function handleTouchMove(e) {
-        if (!isSwipingu) return;
+        // === YAZIM HATASI DÜZELTİLDİ ===
+        if (!isSwiping) return; // "isSwipingu" değil, "isSwiping" olmalı
         touchEndX = e.touches[0].clientX;
 
         const diff = touchStartX - touchEndX;
         if (Math.abs(diff) > 10) { 
-            e.preventDefault();
+            e.preventDefault(); // Yanlışlıkla sayfayı kaydırmayı engelle
         }
     }
 
@@ -343,12 +342,15 @@
 
         if (Math.abs(diff) > swipeThreshold) {
             if (diff > 0) {
+                // Sola kaydırdı (Next)
                 nextButton.click();
             } else {
+                // Sağa kaydırdı (Prev)
                 prevButton.click();
             }
         }
 
+        // Engeli kaldır
         const iframes = carouselInner.querySelectorAll('iframe.instagram-media-rendered');
         iframes.forEach(iframe => {
             iframe.style.pointerEvents = 'auto';
