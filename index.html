@@ -51,7 +51,14 @@
         .highlighted-text { background-color: var(--brand-light-red); color: var(--brand-red); padding: 3px 6px; border-radius: 4px; font-weight: 600; }
         
         /* Carousel için temel stiller */
-        .carousel-container { position: relative; max-width: 100%; margin: 40px auto 20px; overflow: hidden; }
+        .carousel-container { 
+            position: relative; 
+            max-width: 100%; 
+            margin: 40px auto 20px; 
+            overflow: hidden; 
+            /* DEĞİŞİKLİK 2: Yüksekliğin animasyonla değişmesi için eklendi */
+            transition: height 0.35s ease-in-out; 
+        }
         .carousel-inner { display: flex; transition: transform 0.5s ease-in-out; align-items: flex-start; }
         .carousel-item { 
             min-width: 100%; 
@@ -80,20 +87,19 @@
             text-decoration: underline; 
         }
 
-        /* === GÜNCELLENMİŞ LİNK STİLİ (3. VERSİYON) === */
+        /* Metin içi link stili */
         p .text-link {
-            color: inherit; /* Rengi ebeveynden (strong) al (yani #333) */
-            font-weight: inherit; /* Kalınlığı ebeveynden (strong) al */
-            text-decoration: underline; /* Altını varsayılan olarak çiz */
-            text-decoration-color: var(--muted); /* Alt çizgi rengini hafif soluk yap */
-            text-decoration-thickness: 1px; /* Alt çizgi kalınlığı */
+            color: inherit; 
+            font-weight: inherit; 
+            text-decoration: underline; 
+            text-decoration-color: var(--muted); 
+            text-decoration-thickness: 1px; 
             transition: color 0.2s ease, text-decoration-color 0.2s ease;
         }
         p .text-link:hover {
-            color: var(--brand-red); /* Hover'da metin kırmızı olsun */
-            text-decoration-color: var(--brand-red); /* Alt çizgi de kırmızı olsun */
+            color: var(--brand-red); 
+            text-decoration-color: var(--brand-red); 
         }
-        /* ============================================= */
 
         /* Düzeltilmiş Buton Stilleri */
         .carousel-nav { 
@@ -214,17 +220,44 @@
     const nextButton = document.querySelector('.carousel-nav .next');
     let carouselItems = document.querySelectorAll('.carousel-item');
     let currentIndex = 0;
+    
+    // === YENİ FONKSİYON: Carousel yüksekliğini ayarlar ===
+    const carouselContainer = document.querySelector('.carousel-container');
+    function adjustCarouselHeight() {
+        if (carouselItems[currentIndex]) {
+            const itemHeight = carouselItems[currentIndex].offsetHeight;
+            if (itemHeight > 0) {
+                carouselContainer.style.height = `${itemHeight}px`;
+            }
+        }
+    }
 
+    // === GÜNCELLENMİŞ FONKSİYON: Video durdurma eklendi ===
     function updateCarousel() {
         carouselItems = document.querySelectorAll('.carousel-item'); 
+        
+        // DEĞİŞİKLİK 1: Aktif olmayan videoları DOM'dan kaldır (durdurmak için)
+        carouselItems.forEach((item, index) => {
+            if (index !== currentIndex) {
+                const iframe = item.querySelector('iframe.instagram-media-rendered');
+                if (iframe) {
+                    iframe.parentNode.removeChild(iframe);
+                }
+            }
+        });
+
         if (carouselItems.length > 0) {
            carouselInner.style.transform = `translateX(${-currentIndex * 100}%)`;
         }
+        
         if (window.instgrm) {
             setTimeout(() => {
                 window.instgrm.Embeds.process();
             }, 300); 
         }
+        
+        // Yüksekliği ayarla (animasyon bittikten sonra)
+        setTimeout(adjustCarouselHeight, 500); 
     }
 
     prevButton.addEventListener('click', () => {
@@ -238,12 +271,21 @@
     });
     
     document.addEventListener('DOMContentLoaded', () => {
+        carouselItems = document.querySelectorAll('.carousel-item'); // DOM hazır olunca listeyi al
         updateCarousel();
         
         // Mobil swipe (kaydırma) özelliği
         carouselInner.addEventListener('touchstart', handleTouchStart, false);
         carouselInner.addEventListener('touchmove', handleTouchMove, false);
         carouselInner.addEventListener('touchend', handleTouchEnd, false);
+
+        // === YENİ: Yükseklik ayarı için event listener'lar ===
+        // Instagram embed'i yüklendiğinde yüksekliği ayarla
+        window.addEventListener('instgrm:media:rendered', adjustCarouselHeight);
+        // Pencere boyutu değişirse (örn: telefon dönerse) ayarla
+        window.addEventListener('resize', adjustCarouselHeight);
+        // İlk yükleme için (gecikmeli)
+        setTimeout(adjustCarouselHeight, 1000); 
     });
 
     // --- SWIPE FONKSİYONLARI ---
