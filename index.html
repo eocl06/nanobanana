@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>30 Ağustos Zaferi’nin Renkleri - Google Gemini ile Tarihe Dokunuş</title>
+    <title>Öğretmenlerden öğrencilerine "Atatürk'le fotoğraf" sürprizi</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -12,86 +12,135 @@
             --bg: #fefefe;
             --text: #111827;
             --muted: #6b7280;
-            --gemini-blue: #4285F4;
-            --gemini-green: #34A853;
-            --gemini-yellow: #FBBC05;
-            --gemini-red: #EA4335;
-            --gemini-gradient-start: #4285F4;
-            --gemini-gradient-end: #EA4335;
-            --gemini-light-bg: #e8f0fe;
+            --brand-red: #E30A17; /* Cumhuriyet Bayramı Kırmızısı */
+            --brand-light-red: #fbebee; /* Vurgu için açık kırmızı */
             --carousel-radius: 12px;
         }
         * { box-sizing: border-box; }
         body { margin: 0; padding: 0; font-family: 'Roboto', sans-serif; background: var(--bg); color: var(--text); font-size: 1.05rem; line-height: 1.75; }
-        .progress-bar { position: fixed; top: 0; left: 0; height: 4px; width: 0; background: linear-gradient(to right, var(--gemini-green), var(--gemini-blue), var(--gemini-yellow), var(--gemini-red)); border-radius: 2px; box-shadow: 0 0 8px rgba(0, 0, 0, 0.1); z-index: 1001; transition: width 0.25s ease-out; }
+        
+        /* Değişiklik burada: Progress Bar'a gradyan eklendi */
+        .progress-bar { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            height: 4px; 
+            width: 0; 
+            background: linear-gradient(to right, var(--brand-red), #ffffff); /* Düz renk gradyan ile değiştirildi */
+            border-radius: 2px; 
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1); /* Gölge nötrleştirildi */
+            z-index: 1001; 
+            transition: width 0.25s ease-out; 
+        }
+
         .container { max-width: 720px; margin: 20px auto; padding: 24px 24px 32px; background: #fff; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07); position: relative; }
         h1 { font-size: 2.5rem; font-family: 'Playfair Display', serif; color: var(--text); text-align: center; margin-bottom: 30px; line-height: 1.3; position: relative; }
-        h1::after { content: ''; display: block; width: 80px; height: 4px; background: linear-gradient(to right, var(--gemini-blue), var(--gemini-green)); margin: 15px auto 0 auto; border-radius: 2px; }
+        h1::after { content: ''; display: block; width: 80px; height: 4px; background: var(--brand-red); margin: 15px auto 0 auto; border-radius: 2px; }
         h2 { font-size: 1.65rem; margin-top: 48px; font-family: 'Playfair Display', serif; color: var(--text); text-align: left; }
         p { margin-bottom: 20px; color: var(--muted); font-family: 'Inter', sans-serif; text-align: left; }
         p strong { color: #333; font-weight: 600; }
-        .highlighted-text { background-color: var(--gemini-light-bg); color: var(--gemini-blue); padding: 3px 6px; border-radius: 4px; font-weight: 600; }
+        .highlighted-text { background-color: var(--brand-light-red); color: var(--brand-red); padding: 3px 6px; border-radius: 4px; font-weight: 600; }
         
         /* Carousel için temel stiller */
         .carousel-container { position: relative; max-width: 100%; margin: 40px auto 20px; overflow: hidden; }
         .carousel-inner { display: flex; transition: transform 0.5s ease-in-out; align-items: flex-start; }
-        .carousel-item { min-width: 100%; box-sizing: border-box; text-align: center; padding: 0 10px; }
-        .carousel-item .prompt-text { font-family: 'Inter', sans-serif; font-size: 0.9rem; color: var(--muted); line-height: 1.5; padding: 8px 10px; margin-bottom: 0; }
+        .carousel-item { 
+            min-width: 100%; 
+            box-sizing: border-box; 
+            text-align: center; 
+            padding: 0 10px;
+            display: flex; /* İçeriği ortalamak için flexbox kullan */
+            flex-direction: column; /* Dikey hizalama */
+            justify-content: center; /* Dikeyde ortala */
+            align-items: center; /* Yatayda ortala */
+        }
+        
+        /* Instagram Embed'in carousel içinde düzgün durması için */
+        .carousel-item blockquote.instagram-media { margin: 0 auto !important; max-width: 100%; /* Kapsayıcıya sığmasını sağla */ }
+
+        .carousel-item .prompt-text { font-family: 'Inter', sans-serif; font-size: 0.9rem; color: var(--muted); line-height: 1.5; padding: 8px 10px; margin-top: 15px; /* Videodan sonra biraz boşluk */ }
         .carousel-item .prompt-text strong { color: var(--text); }
+        
+        /* Modern Buton Stilleri */
         .carousel-nav { position: absolute; top: 40%; transform: translateY(-50%); width: 100%; display: flex; justify-content: space-between; z-index: 100; pointer-events: none; }
-        .carousel-nav button { background-color: rgba(0, 0, 0, 0.5); color: white; border: none; padding: 10px 15px; cursor: pointer; border-radius: 5px; font-size: 1.2rem; transition: background-color 0.3s ease; pointer-events: all; }
-        .carousel-nav button:hover { background-color: rgba(0, 0, 0, 0.7); }
-        .carousel-nav .prev { margin-left: -5px; }
-        .carousel-nav .next { margin-right: -5px; }
-
-        /* Image Comparison Slider Stilleri */
-        .image-comparison-slider { position: relative; width: 100%; overflow: hidden; border-radius: var(--carousel-radius); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); cursor: ew-resize; -webkit-user-select: none; user-select: none; }
-        .image-comparison-slider .bw-image, .image-comparison-slider .color-image { display: block; width: 100%; height: auto; pointer-events: none; }
-        .image-comparison-slider .color-image { position: absolute; top: 0; left: 0; height: 100%; clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%); }
-        .image-comparison-slider .slider-handle { position: absolute; top: 0; left: 50%; width: 4px; height: 100%; background-color: rgba(255, 255, 255, 0.8); transform: translateX(-50%); z-index: 10; pointer-events: none; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
-        .image-comparison-slider .slider-handle::after { content: '↔'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(255, 255, 255, 0.8); color: #333; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: bold; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
-
-        .cta-section { text-align: center; margin: 25px auto 30px; padding: 30px 0; border-top: 1px dashed #eee; }
-        .cta-section .cta-text { font-family: 'Inter', sans-serif; font-size: 1.2rem; line-height: 1.8; color: var(--text); margin-bottom: 30px; max-width: 650px; margin-left: auto; margin-right: auto; }
-        .cta-section .cta-text strong { font-weight: 600; }
-        .button { background: linear-gradient(90deg, var(--gemini-blue) 0%, var(--gemini-green) 100%); color: white; padding: 14px 36px; border-radius: 10px; font-size: 1.05rem; font-weight: 500; text-decoration: none; box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3); transition: all 0.3s ease; display: inline-block; border: none; cursor: pointer; }
-        .button:hover { background: linear-gradient(90deg, var(--gemini-green) 0%, var(--gemini-yellow) 100%); box-shadow: 0 6px 16px rgba(52, 168, 83, 0.4); transform: translateY(-2px); }
+        .carousel-nav button { 
+            background-color: transparent; /* Şeffaf arka plan */
+            color: var(--text); /* Yazı rengi */
+            border: none; 
+            padding: 10px 15px; 
+            cursor: pointer; 
+            border-radius: 50%; /* Yuvarlak butonlar */
+            font-size: 2rem; /* Ok sembollerini büyüt */
+            transition: all 0.3s ease; 
+            pointer-events: all; 
+            position: relative;
+            width: 50px; /* Buton genişliği */
+            height: 50px; /* Buton yüksekliği */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* Hafif gölge */
+            opacity: 0.7; /* Hafif şeffaflık */
+        }
+        .carousel-nav button:hover { 
+            background-color: rgba(255, 255, 255, 0.9); /* Hover'da daha belirgin beyaz arka plan */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12); /* Hover'da daha belirgin gölge */
+            transform: translateY(-2px) scale(1.05); /* Hafif hareket efekti */
+            opacity: 1;
+        }
+        .carousel-nav .prev { margin-left: -20px; } /* Kenardan biraz dışarıda başla */
+        .carousel-nav .next { margin-right: -20px; } /* Kenardan biraz dışarıda başla */
 
         @media (max-width: 768px) {
             h1 { font-size: 2rem; } h2 { font-size: 1.4rem; } .container { padding: 20px 16px 24px; }
-            .button { padding: 12px 28px; font-size: 1rem; } .carousel-nav button { padding: 8px 12px; font-size: 1rem; }
+            .carousel-nav button { 
+                padding: 8px 12px; 
+                font-size: 1.5rem; /* Mobil için okları küçült */
+                width: 40px; 
+                height: 40px; 
+                top: 35%; /* Mobil için yukarı kaydır */
+            } 
+            .carousel-nav .prev { margin-left: -10px; }
+            .carousel-nav .next { margin-right: -10px; }
+            .carousel-item { padding: 0; } 
         }
     </style>
 </head>
 <body>
     <div class="progress-bar" id="progressBar"></div>
     <div class="container">
-        <h1>30 Ağustos Zaferi’nin Renkleri</h1>
+        <h1>Öğretmenlerden öğrencilerine "Atatürk'le fotoğraf" sürprizi</h1>
 
-        <p>30 Ağustos, yalnızca bir tarih değil; ortak hafızamızda yankılanan <strong>o büyük gururun ve sarsılmaz inancın adı</strong>. O duygunun en berrak hâlini, o günlere tanıklık eden fotoğraflarda buluyoruz: tozlu yollarda yürüyen bir ordu, omuz omuza verilen mücadele, kaderimizi değiştiren kararlı bakışlar… ve çoğu siyah-beyaz.</p>
-        <p>Bildiğiniz üzere son günlerde dijital dünyada yeni bir heyecan var: <strong>Google’ın “Nano Banana” trendi</strong>. (Kısaca: Nano Banana, Google Gemini içinde kısa komutlarla fotoğraflara yapay zekâ destekli yaratıcı dokunuşlar yapmayı sağlayan bir araç.)</p>
-        <p>Bundle editörleri olarak bu özel günde bu heyecanı anlamlı bir yerden değerlendirdik; Atatürk ve Kurtuluş Savaşı’ndan hepimizin bildiği fotoğrafları biz seçtik, renklendirmeyi ise Nano Banana yaptı. Amacımız tarihi “yeniden yazmak” değil; <strong>o anların içindeki canlılığı, kararlılığı ve umudu bugünün gözleriyle yeniden hissettirmekti.</strong></p>
-        <p>Aşağıdaki carousel alanında çalışmaları görebilir, her fotoğrafın altında kullandığımız istemi inceleyebilirsiniz.</p>
+        <p>Sosyal medyada, özellikle Cumhuriyetimizin 102. kuruluş yıldönümüne yaklaştığımız dönemde, içinizi ısıtacak yeni bir akımla karşılaşmış olabilirsiniz. Başrolde, <strong>ülkemizin dört bir yanından yaratıcı öğretmenlerimiz</strong> ve son günlerin trendi <strong>Google'ın yapay zekâsı Gemini</strong> ile fotoğraf oluşturma akımı var.</p>
+        <p>Öğretmenlerimiz, yaklaşan Cumhuriyet Bayramı için öğrencilerine tatlı bir sürpriz hazırladı ve bu anların görüntülerini sosyal medyada paylaştı. Kısa sürede yayılarak tatlı bir akıma dönüşen bu videolarda, yapay zekânın gücünden yararlanan öğretmenler <strong>öğrencilerinin fotoğraflarını Mustafa Kemal Atatürk ile aynı karede birleştiriyor</strong>. Bu sürprizi gören çocukların yüzlerine yansıyan <strong>şaşkınlık ve sevinç</strong> ise hepimizin içini ısıttı.</p>
+        <p>Çocukların kurucularıyla aynı fotoğrafta bir “anı”ya sahip olması fikri doğal olarak büyük beğeni topladı. Paylaşılan işler sosyal medyada da oldukça güzel yorumlar aldı ve hepimizde <strong>şaşkınlıkla karışık bir sevinç, içten bir özlem ve derin bir gurur</strong> uyandırdı.</p>
 
         <div class="carousel-container">
             <div class="carousel-inner" id="carouselInner">
                 
                 <div class="carousel-item">
-                     <div class="image-comparison-slider">
-                        <img class="bw-image" src="https://i.ibb.co/6Jn9xxF0/image-44.png" alt="Atatürk ve İsmet İnönü Siyah Beyaz">
-                        <img class="color-image" src="https://i.ibb.co/nqK00gST/Gemini_Generated_Image_qt1tabqt1tabqt1t.png" alt="Atatürk ve İsmet İnönü Renkli">
-                        <div class="slider-handle"></div>
-                    </div>
-                    <p class="prompt-text"><strong>Kullanılan istem:</strong> "Bu tarihi siyah-beyaz fotoğrafı, özellikle üniformalardaki detayları ve yüz ifadelerini öne çıkaracak şekilde, canlı ve tarihi gerçekliğe uygun tonlarda renklendir."</p>
+                    <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DQHIg2jjC2u/?igsh=MWZpd2tuY3NoMjN6aQ==" data-instgrm-version="14" style=" max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"></blockquote>
+                    <p class="prompt-text"><strong>Video Açıklaması:</strong> Öğrencisine Atatürk fotoğrafı sürprizi yapan bir öğretmen.</p>
                 </div>
                 
                 <div class="carousel-item">
-                     <div class="image-comparison-slider">
-                        <img class="bw-image" src="https://i.ibb.co/chrXppd0/image.png" alt="Kurtuluş Savaşı cephesi Siyah Beyaz">
-                        <img class="color-image" src="https://i.ibb.co/kgbcTxcL/Gemini_Generated_Image_w0edo2w0edo2w0ed.png" alt="Kurtuluş Savaşı cephesi Renkli">
-                        <div class="slider-handle"></div>
-                    </div>
-                    <p class="prompt-text"><strong>Kullanılan istem:</strong> "Kurtuluş Savaşı cephesinden bu siyah-beyaz kareye, tozlu ve dramatik bir atmosfer hissi verecek şekilde, gerçekçi ve mat tonlar kullanarak renk kat."</p>
+                    <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DQHI1_NCOAa/?igsh=aG9hN3k5ZmxoeXA0" data-instgrm-version="14" style=" max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"></blockquote>
+                    <p class="prompt-text"><strong>Video Açıklaması:</strong> Sınıfta yaşanan o an: Atatürk'le fotoğrafını gören öğrencinin mutluluğu.</p>
+                </div>
+
+                <div class="carousel-item">
+                    <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DQChIoojFIk/?igsh=ZHVvdmw0Z3JtZGpv" data-instgrm-version="14" style=" max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"></blockquote>
+                    <p class="prompt-text"><strong>Video Açıklaması:</strong> Bir başka sınıftan, teknoloji ve tarihin buluştuğu anlar.</p>
+                </div>
+
+                <div class="carousel-item">
+                    <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DQE-0N-DJQd/?igsh=OGM5N3lncTA5MWRy" data-instgrm-version="14" style=" max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"></blockquote>
+                    <p class="prompt-text"><strong>Video Açıklaması:</strong> Cumhuriyet Bayramı hediyesini alan öğrencinin şaşkınlığı.</p>
+                </div>
+
+                <div class="carousel-item">
+                    <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DQM09s3jezx/?igsh=MTA5NDVmczc3c2F0Yg==" data-instgrm-version="14" style=" max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"></blockquote>
+                    <p class="prompt-text"><strong>Video Açıklaması:</strong> Öğretmenin hazırladığı sürpriz ve öğrencinin sevinci.</p>
                 </div>
 
             </div>
@@ -100,13 +149,14 @@
                 <button class="next" aria-label="Sonraki">&#10095;</button>
             </div>
         </div>
-        <div class="cta-section">
-            <p class="cta-text">
-                <strong style="color: var(--gemini-blue);">30 Ağustos Zafer Bayramı’nı bugün bir kez daha gururla kutluyoruz.</strong>
-                <br>Siz de <strong>geçmişin siyah-beyazına bugünün renklerini katmak</strong> isterseniz: <strong class="highlighted-text">Gemini’de Nano Banana’yı kolayca deneyebilirsiniz.</strong>
-            </p>
-            <a class="button" href="https://gemini.google.com/app" target="_blank">Nano Banana'yı Dene</a>
-        </div>
+
+        <p>Peki, neden böylesine basit bir fikir hepimizin bu kadar hoşuna gitti?</p>
+        <p>Çünkü Cumhuriyet, sadece geçmişte kalan bir tarih değil; <strong>her neslin kendi diliyle yeniden sahip çıktığı yaşayan bir bilinç hâlidir</strong>.</p>
+        <p>Bugün ise o dil, <strong>teknolojinin dili</strong>. Öğretmenlerimizin yaptığı da tam olarak bu.</p>
+        <p>O fotoğraflarda Atatürk'ün yanında gülümseyen her çocuk, Cumhuriyet'in bunca yıldan sonra bile ne kadar <strong>canlı, ne kadar "bugüne ait" bir fikir</strong> olduğunun en güzel kanıtı. <strong>Geçmişe değil, tam da bugüne bakan</strong> muazzam bir hediye.</p>
+        <p>Cumhuriyetimizin 102. kuruluş yıldönümüne yaklaşırken, <strong>öğrencilerin ışıldayan gözlerinde</strong> bu eşsiz armağanın hiç eskimediğini bir kez daha görüyoruz. Bu duyguyu bize yeniden hatırlatan tüm öğretmenlerimize, <strong>kalpten bir teşekkür borçluyuz</strong>.</p>
+        <p>Tüm öğretmen ve öğrencilerimizin <strong>yaklaşan Cumhuriyet Bayramı kutlu olsun!</strong></p>
+
     </div>
 
 <script>
@@ -123,12 +173,21 @@
     const carouselInner = document.getElementById('carouselInner');
     const prevButton = document.querySelector('.carousel-nav .prev');
     const nextButton = document.querySelector('.carousel-nav .next');
-    const carouselItems = document.querySelectorAll('.carousel-item');
+    // Carousel item'larını dinamik olarak alıyoruz
+    let carouselItems = document.querySelectorAll('.carousel-item');
     let currentIndex = 0;
 
     function updateCarousel() {
+        carouselItems = document.querySelectorAll('.carousel-item'); // Her ihtimale karşı listeyi yenile
         if (carouselItems.length > 0) {
            carouselInner.style.transform = `translateX(${-currentIndex * 100}%)`;
+        }
+        // Instagram videoları bazen kaydırmadan sonra yeniden yüklenmeli veya düzenlenmeli
+        if (window.instgrm) {
+            // Güvenli bir gecikme ekleyerek sayfanın render olmasını bekle
+            setTimeout(() => {
+                window.instgrm.Embeds.process();
+            }, 300); // 300ms gecikme
         }
     }
 
@@ -141,39 +200,13 @@
         currentIndex = (currentIndex < carouselItems.length - 1) ? currentIndex + 1 : 0;
         updateCarousel();
     });
-    updateCarousel();
-
-    // Image Comparison Slider Script
-    document.querySelectorAll('.image-comparison-slider').forEach(slider => {
-        let isDragging = false;
-        const colorImage = slider.querySelector('.color-image');
-        const handle = slider.querySelector('.slider-handle');
-
-        const startDragging = (e) => {
-            isDragging = true;
-            e.stopPropagation(); 
-        };
-        const stopDragging = () => { isDragging = false; };
-        const onDrag = (e) => {
-            if (!isDragging) return;
-            e.stopPropagation();
-            const eventX = e.touches ? e.touches[0].clientX : e.clientX;
-            const sliderRect = slider.getBoundingClientRect();
-            let offsetX = eventX - sliderRect.left;
-            let percentage = (offsetX / sliderRect.width) * 100;
-            percentage = Math.max(0, Math.min(100, percentage));
-            handle.style.left = `${percentage}%`;
-            
-            colorImage.style.clipPath = `polygon(${percentage}% 0, 100% 0, 100% 100%, ${percentage}% 100%)`;
-        };
-
-        slider.addEventListener('mousedown', startDragging);
-        document.addEventListener('mouseup', stopDragging);
-        document.addEventListener('mousemove', onDrag);
-        slider.addEventListener('touchstart', startDragging, { passive: true });
-        document.addEventListener('touchend', stopDragging);
-        document.addEventListener('touchmove', onDrag);
+    
+    // Sayfa yüklendiğinde carousel'i ayarla
+    document.addEventListener('DOMContentLoaded', () => {
+        updateCarousel();
     });
+
 </script>
+<script async src="//www.instagram.com/embed.js"></script>
 </body>
 </html>
