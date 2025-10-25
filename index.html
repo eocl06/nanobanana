@@ -56,7 +56,7 @@
             max-width: 100%; 
             margin: 40px auto 20px; 
             overflow: hidden; 
-            /* DEĞİŞİKLİK 2: Yüksekliğin animasyonla değişmesi için eklendi */
+            /* Yüksekliğin animasyonla değişmesi için */
             transition: height 0.35s ease-in-out; 
         }
         .carousel-inner { display: flex; transition: transform 0.5s ease-in-out; align-items: flex-start; }
@@ -214,52 +214,64 @@
         progressBar.style.width = `${scrollPercent}%`;
     });
 
-    // Carousel Script
+    // === GÜNCELLENMİŞ CAROUSEL SCRIPT ===
     const carouselInner = document.getElementById('carouselInner');
     const prevButton = document.querySelector('.carousel-nav .prev');
     const nextButton = document.querySelector('.carousel-nav .next');
-    let carouselItems = document.querySelectorAll('.carousel-item');
+    let carouselItems = []; // DOMContentLoaded'de doldurulacak
     let currentIndex = 0;
-    
-    // === YENİ FONKSİYON: Carousel yüksekliğini ayarlar ===
     const carouselContainer = document.querySelector('.carousel-container');
+
+    // Carousel yüksekliğini o anki aktif slayta göre ayarlar
     function adjustCarouselHeight() {
         if (carouselItems[currentIndex]) {
+            // Yüksekliği ölç
             const itemHeight = carouselItems[currentIndex].offsetHeight;
+            // Sadece 0'dan büyükse ayarla (çökmeyi engelle)
             if (itemHeight > 0) {
                 carouselContainer.style.height = `${itemHeight}px`;
             }
         }
     }
 
-    // === GÜNCELLENMİŞ FONKSİYON: Video durdurma eklendi ===
+    // Carousel'i günceller, videoları yönetir
     function updateCarousel() {
-        carouselItems = document.querySelectorAll('.carousel-item'); 
-        
-        // DEĞİŞİKLİK 1: Aktif olmayan videoları DOM'dan kaldır (durdurmak için)
         carouselItems.forEach((item, index) => {
+            // DEĞİŞİKLİK 1: Videoları durdurmak için daha iyi bir yöntem
+            // Sadece aktif olmayan slaytları sıfırla
             if (index !== currentIndex) {
-                const iframe = item.querySelector('iframe.instagram-media-rendered');
-                if (iframe) {
-                    iframe.parentNode.removeChild(iframe);
+                const blockquote = item.querySelector('blockquote.instagram-media');
+                // Eğer blockquote işlenmişse (içinde iframe varsa)
+                if (blockquote && blockquote.hasAttribute('data-instgrm-processed')) {
+                    // Onu orijinal, işlenmemiş haliyle değiştir
+                    const newBlockquote = blockquote.cloneNode(true);
+                    // 'data-instgrm-processed' attribute'unu kaldır ki tekrar işlenebilsin
+                    newBlockquote.removeAttribute('data-instgrm-processed');
+                    // DOM'daki eskiyi yeniyle değiştir
+                    if (blockquote.parentNode) {
+                        blockquote.parentNode.replaceChild(newBlockquote, blockquote);
+                    }
                 }
             }
         });
 
+        // Slaytı kaydır
         if (carouselItems.length > 0) {
            carouselInner.style.transform = `translateX(${-currentIndex * 100}%)`;
         }
         
+        // Instagram script'ini çağır (sadece yeni, işlenmemiş blockquote'ları işleyecek)
         if (window.instgrm) {
             setTimeout(() => {
                 window.instgrm.Embeds.process();
-            }, 300); 
+            }, 50); // Hafif bir gecikme, DOM'un güncellenmesi için
         }
         
-        // Yüksekliği ayarla (animasyon bittikten sonra)
-        setTimeout(adjustCarouselHeight, 500); 
+        // DEĞİŞİKLİK 2: Hatalı setTimeout kaldırıldı.
+        // Yükseklik ayarı artık 'instgrm:media:rendered' olayıyla tetiklenecek.
     }
 
+    // Buton eventleri
     prevButton.addEventListener('click', () => {
         currentIndex = (currentIndex > 0) ? currentIndex - 1 : carouselItems.length - 1;
         updateCarousel();
@@ -270,26 +282,31 @@
         updateCarousel();
     });
     
+    // Sayfa yüklendiğinde
     document.addEventListener('DOMContentLoaded', () => {
-        carouselItems = document.querySelectorAll('.carousel-item'); // DOM hazır olunca listeyi al
-        updateCarousel();
+        carouselItems = document.querySelectorAll('.carousel-item'); // Listeyi al
         
         // Mobil swipe (kaydırma) özelliği
         carouselInner.addEventListener('touchstart', handleTouchStart, false);
         carouselInner.addEventListener('touchmove', handleTouchMove, false);
         carouselInner.addEventListener('touchend', handleTouchEnd, false);
 
-        // === YENİ: Yükseklik ayarı için event listener'lar ===
-        // Instagram embed'i yüklendiğinde yüksekliği ayarla
+        // Yükseklik ayarı için event listener'lar
+        // DEĞİŞİKLİK 3: Sadece bu iki listener'a güveniyoruz
         window.addEventListener('instgrm:media:rendered', adjustCarouselHeight);
-        // Pencere boyutu değişirse (örn: telefon dönerse) ayarla
         window.addEventListener('resize', adjustCarouselHeight);
-        // İlk yükleme için (gecikmeli)
-        setTimeout(adjustCarouselHeight, 1000); 
+
+        // İlk Instagram embed'ini yükle
+        if (window.instgrm) {
+            window.instgrm.Embeds.process();
+        } else {
+            // Instagram script'i henüz yüklenmediyse, ilk yükleme için bir gecikme
+            // (Bu genelde <script async> bloğundan önce çalışırsa olur)
+            setTimeout(adjustCarouselHeight, 1500); // Fallback
+        }
     });
 
-    // --- SWIPE FONKSİYONLARI ---
-
+    // --- SWIPE FONKSİYONLARI (Değişiklik yok) ---
     let touchStartX = 0;
     let touchEndX = 0;
     let isSwiping = false;
